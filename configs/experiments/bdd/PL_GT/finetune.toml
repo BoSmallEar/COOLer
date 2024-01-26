@@ -1,0 +1,32 @@
+use_pl_dataset = false
+
+[[config]]
+path = "../../../../base/datasets/bdd100k_track.toml"
+
+[[config]]
+path = "../../../../base/models/mmdetection/qdtrack_PL_GT.toml"
+
+[model]
+category_mapping = {}
+train_category = []
+test_category = []
+    [model.optimizer]
+    type = "SGD"
+    lr = 0.02
+    kwargs = {"momentum" = 0.9}
+
+    [model.lr_scheduler]
+    type = "MultiStepLR"
+    kwargs = {"milestones" = [4, 5]}
+
+[launch]
+samples_per_gpu = 2
+workers_per_gpu = 0
+
+[trainer]
+max_epochs = 6
+log_every_n_steps = 50
+check_val_every_n_epoch = 3
+num_sanity_val_steps = 0
+
+

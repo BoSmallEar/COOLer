@@ -1,0 +1,62 @@
+[[train]]
+name = "shift_track_train"
+type = "Shift"
+annotations = "data/shift_dataset/v2/intermediate/label_merged/4250/det_2d_front_train.json"
+data_root = "data/shift_dataset/v2/release/images/10fps/img_front.hdf5"
+attributes = {"timeofday" = ["daytime"], "weather" = ["clear"]}
+num_processes = 0
+cache_as_binary = true
+    [train.sample_mapper.data_backend]
+    type = "HDF5Backend"
+
+    [train.sample_mapper]
+    skip_empty_samples = true
+
+    [train.ref_sampler]
+    strategy = 'uniform'
+    scope = 6
+    num_ref_imgs = 1
+    skip_nomatch_samples = true
+
+   [[train.sample_mapper.transformations]]
+    type = "Resize"
+    shape = [720, 1280]
+
+    [[train.sample_mapper.transformations]]
+    type = "KorniaAugmentationWrapper"
+    kornia_type = "RandomHorizontalFlip"
+    prob = 0.5
+
+[[test]]
+name = "shift_track_val"
+type = "Shift"
+annotations = "data/shift_dataset/v2/intermediate/label_merged/4250/det_2d_front_val.json"
+data_root = "data/shift_dataset/v2/release/images/10fps/img_front.hdf5"
+attributes = {"timeofday" = ["daytime"], "weather" = ["clear"]}
+eval_metrics = ["detect", "track"]
+num_processes = 0
+cache_as_binary = true
+    [test.sample_mapper.data_backend]
+    type = "HDF5Backend"
+
+    [[test.sample_mapper.transformations]]
+    type = "Resize"
+    shape = [720, 1280]
+
+[[predict]]
+name = "shift_track_train"
+type = "Shift"
+annotations = "data/shift_dataset/v2/intermediate/label_merged/4250/det_2d_front_train.json"
+data_root = "data/shift_dataset/v2/release/images/10fps/img_front.hdf5"
+attributes = {"timeofday" = ["daytime"], "weather" = ["clear"]}
+eval_metrics = ["detect", "track"]
+num_processes = 0
+cache_as_binary = true
+    [predict.sample_mapper.data_backend]
+    type = "HDF5Backend"
+
+    [predict.sample_mapper]
+    skip_empty_samples = false
+    [[predict.sample_mapper.transformations]]
+    type = "Resize"
+    shape = [720, 1280]
